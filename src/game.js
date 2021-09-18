@@ -39,7 +39,7 @@ const game = (onFieldUpdate, config) => {
         };
       case DIRECTIONS.LEFT:
         return {
-          x: x - 1 < 0 ? indexXMax : y - 1,
+          x: x - 1 < 0 ? indexXMax : x - 1,
           y,
         };
       case DIRECTIONS.RIGHT:
