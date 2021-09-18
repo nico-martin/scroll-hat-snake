@@ -51,7 +51,7 @@ const game = (onFieldUpdate, config) => {
   return {
     start: () => {
       step();
-      //gameInterval = setInterval(step, 1000 / fps);
+      gameInterval = setInterval(step, 1000 / fps);
     },
     stop: () => clearInterval(gameInterval),
     setDirection: (dir) => {
