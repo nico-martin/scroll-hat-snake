@@ -9,7 +9,7 @@ const game = (onFieldUpdate, config) => {
   const { height, width, fps } = {
     width: 17,
     height: 7,
-    fps: 10,
+    fps: 5,
     ...config,
   };
   const field = Array(height).fill(Array(width).fill(0));
@@ -54,6 +54,7 @@ const game = (onFieldUpdate, config) => {
 
   const step = () => {
     i++;
+    console.log("step", step);
     if (step === 5) {
       currentDirection = DIRECTIONS.RIGHT;
     } else if (step === 10) {
