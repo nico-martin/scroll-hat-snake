@@ -60,7 +60,7 @@ const game = (onFieldUpdate, config) => {
     } else if (i === 10) {
       currentDirection = DIRECTIONS.UP;
     } else if (i === 15) {
-      currentDirection = DIRECTIONS.LEFT;
+      //currentDirection = DIRECTIONS.LEFT;
     }
     snake = snake.map((snakePixel) => movePixel(snakePixel, currentDirection));
     const fieldMatrix = field.map((col, colIndex) =>
