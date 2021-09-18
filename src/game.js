@@ -18,18 +18,35 @@ const game = (onFieldUpdate, config) => {
 
   let gameInterval = null;
   let currentDirection = DIRECTIONS.RIGHT;
-  let snake = [[1, 1]];
+  let snake = [
+    {
+      x: 1,
+      y: 1,
+    },
+  ];
 
-  const movePixel = ([x, y], direction) => {
+  const movePixel = ({ x, y }, direction) => {
     switch (direction) {
       case DIRECTIONS.UP:
-        return [x, y - 1 < 0 ? indexYMax : y - 1];
+        return {
+          x,
+          y: y - 1 < 0 ? indexYMax : y - 1,
+        };
       case DIRECTIONS.DOWN:
-        return [x, y + 1 > indexYMax ? 0 : y + 1];
+        return {
+          x,
+          y: y + 1 > indexYMax ? 0 : y + 1,
+        };
       case DIRECTIONS.LEFT:
-        return [x - 1 < 0 ? indexXMax : y - 1, y];
+        return {
+          x: x - 1 < 0 ? indexXMax : y - 1,
+          y,
+        };
       case DIRECTIONS.RIGHT:
-        return [x + 1 > indexXMax ? 0 : x + 1, y];
+        return {
+          x: x + 1 > indexXMax ? 0 : x + 1,
+          y,
+        };
     }
   };
 
@@ -38,8 +55,7 @@ const game = (onFieldUpdate, config) => {
     const fieldMatrix = field.map((row, rowIndex) =>
       row.map((col, colIndex) =>
         snake.find(
-          (snakePixel) =>
-            rowIndex === snakePixel[0] && colIndex === snakePixel[1]
+          (snakePixel) => rowIndex === snakePixel.x && colIndex === snakePixel.y
         ) === undefined
           ? 0
           : 100
