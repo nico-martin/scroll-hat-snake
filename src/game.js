@@ -1,3 +1,5 @@
+const { randomIntFromInterval } = require("./helpers");
+
 const DIRECTIONS = {
   UP: "UP",
   LEFT: "LEFT",
@@ -24,6 +26,10 @@ const game = (onStepUpdated, config) => {
       y: 1,
     },
   ];
+  let food = {
+    x: randomIntFromInterval(0, indexXMax),
+    y: randomIntFromInterval(0, indexYMax),
+  };
 
   const movePixel = ({ x, y }, direction) => {
     switch (direction) {
@@ -50,13 +56,16 @@ const game = (onStepUpdated, config) => {
     }
   };
 
-  let i = 0;
-
   const step = () => {
-    snake = [movePixel(snake[0], currentDirection), ...snake];
-    i++;
-    const checkForFood = i % 5 === 0;
-    if (!checkForFood) {
+    const nextPixel = movePixel(snake[0], currentDirection);
+    snake = [nextPixel, ...snake];
+
+    if (nextPixel.x === food.x && nextPixel.y === food.y) {
+      food = {
+        x: randomIntFromInterval(0, indexXMax),
+        y: randomIntFromInterval(0, indexYMax),
+      };
+    } else {
       snake.pop();
     }
 
@@ -66,9 +75,11 @@ const game = (onStepUpdated, config) => {
       col.map((row, rowIndex) =>
         snake.find(
           (snakePixel) => rowIndex === snakePixel.x && colIndex === snakePixel.y
-        ) === undefined
-          ? 0
-          : 100
+        ) !== undefined
+          ? 100
+          : rowIndex === food.x && colIndex === food.y
+          ? 200
+          : 0
       )
     );
 

@@ -9,7 +9,11 @@ const arrayToLength = (array, length, fill = 0) => {
 
 const wait = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms));
 
+const randomIntFromInterval = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
+
 module.exports = {
   arrayToLength,
   wait,
+  randomIntFromInterval,
 };
