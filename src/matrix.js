@@ -8,7 +8,7 @@ const matrixToArray = (rows, height = 7, width = 17) => {
   let i = 0;
   rows.map((x) =>
     x.map((y) => {
-      arr[i] = y === 1 ? 50 : 0;
+      arr[i] = y;
       i = i + 1;
     })
   );
