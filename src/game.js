@@ -7,8 +7,8 @@ const DIRECTIONS = {
 
 const game = (onFieldUpdate, config) => {
   const { height, width, fps } = {
-    width: 17,
-    height: 7,
+    width: 7,
+    height: 17,
     fps: 10,
     ...config,
   };
