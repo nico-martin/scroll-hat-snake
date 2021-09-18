@@ -7,8 +7,8 @@ const DIRECTIONS = {
 
 const game = (onFieldUpdate, config) => {
   const { height, width, fps } = {
-    width: 7,
-    height: 17,
+    width: 17,
+    height: 7,
     fps: 10,
     ...config,
   };
@@ -50,11 +50,10 @@ const game = (onFieldUpdate, config) => {
 
   return {
     start: () => {
-      gameInterval = setInterval(step, 1000 / fps);
+      step();
+      //gameInterval = setInterval(step, 1000 / fps);
     },
-    stop: () => {
-      clearInterval(gameInterval);
-    },
+    stop: () => clearInterval(gameInterval),
     setDirection: (dir) => {
       if (Object.values(DIRECTIONS).indexOf(dir) === -1) {
         console.error(`invalid direction ${dir}`);

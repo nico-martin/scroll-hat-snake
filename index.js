@@ -9,6 +9,7 @@ const init = async () => {
   const startGame = () => {
     gameNo++;
     const newGame = game((gameMatrix) => {
+      //console.log(gameMatrix);
       scrollController.display(matrixToArray(gameMatrix));
     });
     newGame.start();
