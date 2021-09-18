@@ -56,9 +56,9 @@ const game = (onFieldUpdate, config) => {
     i++;
     console.log("step", i);
     if (i === 5) {
-      currentDirection = DIRECTIONS.RIGHT;
+      //currentDirection = DIRECTIONS.RIGHT;
     } else if (i === 10) {
-      currentDirection = DIRECTIONS.UP;
+      //currentDirection = DIRECTIONS.UP;
     } else if (i === 15) {
       //currentDirection = DIRECTIONS.LEFT;
     }
