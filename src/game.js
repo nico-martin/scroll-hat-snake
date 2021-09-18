@@ -50,7 +50,17 @@ const game = (onFieldUpdate, config) => {
     }
   };
 
+  let i = 0;
+
   const step = () => {
+    i++;
+    if (step === 5) {
+      currentDirection = DIRECTIONS.RIGHT;
+    } else if (step === 10) {
+      currentDirection = DIRECTIONS.UP;
+    } else if (step === 15) {
+      currentDirection = DIRECTIONS.LEFT;
+    }
     snake = snake.map((snakePixel) => movePixel(snakePixel, currentDirection));
     const fieldMatrix = field.map((col, colIndex) =>
       col.map((row, rowIndex) =>
