@@ -8,9 +8,8 @@ const init = async () => {
 
   const startGame = () => {
     gameNo++;
-    const newGame = game((gameMatrix) => {
-      console.log(gameMatrix);
-      scrollController.display(matrixToArray(gameMatrix));
+    const newGame = game((currentGame) => {
+      scrollController.display(matrixToArray(currentGame.matrix));
     });
     newGame.start();
   };

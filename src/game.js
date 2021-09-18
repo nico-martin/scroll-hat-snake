@@ -5,7 +5,7 @@ const DIRECTIONS = {
   DOWN: "DOWN",
 };
 
-const game = (onFieldUpdate, config) => {
+const game = (onStepUpdated, config) => {
   const { height, width, fps } = {
     width: 17,
     height: 7,
@@ -53,16 +53,15 @@ const game = (onFieldUpdate, config) => {
   let i = 0;
 
   const step = () => {
+    snake = [movePixel(snake[0], currentDirection), ...snake];
     i++;
-    console.log("step", i);
-    if (i === 5) {
-      //currentDirection = DIRECTIONS.RIGHT;
-    } else if (i === 10) {
-      //currentDirection = DIRECTIONS.UP;
-    } else if (i === 15) {
-      //currentDirection = DIRECTIONS.LEFT;
+    const checkForFood = i % 5 === 0;
+    if (!checkForFood) {
+      snake.pop();
     }
-    snake = snake.map((snakePixel) => movePixel(snakePixel, currentDirection));
+
+    // checkForSnakeColision();
+
     const fieldMatrix = field.map((col, colIndex) =>
       col.map((row, rowIndex) =>
         snake.find(
@@ -73,7 +72,11 @@ const game = (onFieldUpdate, config) => {
       )
     );
 
-    onFieldUpdate(fieldMatrix);
+    onStepUpdated({
+      matrix: fieldMatrix,
+      currentDirection,
+      snakeLength: snake.length,
+    });
   };
 
   return {
@@ -85,6 +88,13 @@ const game = (onFieldUpdate, config) => {
     setDirection: (dir) => {
       if (Object.values(DIRECTIONS).indexOf(dir) === -1) {
         console.error(`invalid direction ${dir}`);
+      } else if (
+        (currentDirection === DIRECTIONS.UP && dir === DIRECTIONS.DOWN) ||
+        (currentDirection === DIRECTIONS.DOWN && dir === DIRECTIONS.UP) ||
+        (currentDirection === DIRECTIONS.LEFT && dir === DIRECTIONS.RIGHT) ||
+        (currentDirection === DIRECTIONS.RIGHT && dir === DIRECTIONS.LEFT)
+      ) {
+        // can't change to the opposite
       } else {
         currentDirection = dir;
       }
