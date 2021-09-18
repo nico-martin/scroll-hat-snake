@@ -17,7 +17,7 @@ const game = (onFieldUpdate, config) => {
   const indexXMax = width - 1;
 
   let gameInterval = null;
-  let currentDirection = DIRECTIONS.UP;
+  let currentDirection = DIRECTIONS.RIGHT;
   let snake = [
     {
       x: 1,
