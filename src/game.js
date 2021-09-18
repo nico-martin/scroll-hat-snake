@@ -17,7 +17,7 @@ const game = (onFieldUpdate, config) => {
   const indexXMax = width - 1;
 
   let gameInterval = null;
-  let currentDirection = DIRECTIONS.DOWN;
+  let currentDirection = DIRECTIONS.RIGHT;
   let snake = [
     {
       x: 1,
@@ -52,8 +52,8 @@ const game = (onFieldUpdate, config) => {
 
   const step = () => {
     snake = snake.map((snakePixel) => movePixel(snakePixel, currentDirection));
-    const fieldMatrix = field.map((row, rowIndex) =>
-      row.map((col, colIndex) =>
+    const fieldMatrix = field.map((col, colIndex) =>
+      col.map((row, rowIndex) =>
         snake.find(
           (snakePixel) => rowIndex === snakePixel.x && colIndex === snakePixel.y
         ) === undefined
@@ -61,6 +61,7 @@ const game = (onFieldUpdate, config) => {
           : 100
       )
     );
+
     onFieldUpdate(fieldMatrix);
   };
 
