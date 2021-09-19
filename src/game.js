@@ -24,7 +24,7 @@ const game = (config) => {
 
   let gameCount = 0;
   let gameInterval = null;
-  let currentDirection = DIRECTIONS.LEFT;
+  let currentDirection = DIRECTIONS.RIGHT;
   let snake = [
     {
       x: 1,
@@ -118,7 +118,7 @@ const game = (config) => {
     onStepUpdate: (listener) => em.on(STEP_EVENT, listener),
     setDirection: (dirIndex) => {
       const directions = Object.values(DIRECTIONS);
-      if (Object.values(DIRECTIONS)[dirIndex]) {
+      if (!Object.values(DIRECTIONS)[dirIndex]) {
         console.error(`invalid direction index ${dirIndex}`);
       } else if (
         (currentDirection === DIRECTIONS.UP &&
