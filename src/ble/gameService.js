@@ -1,7 +1,11 @@
 const bleno = require("bleno");
 const Characteristic = bleno.Characteristic;
 
-module.exports = (setDirection = () => {}, getDirection = () => {}) => ({
+module.exports = (
+  setDirection = () => {},
+  getDirection = () => {},
+  onStepUpdate
+) => ({
   uuid: "75c7c8d271214267b885eb3f4a21faf5",
   characteristics: [
     new Characteristic({
@@ -48,13 +52,10 @@ module.exports = (setDirection = () => {}, getDirection = () => {}) => ({
         }),
       ],
       onSubscribe: (maxValueSize, updateValueCallback) => {
-        console.log("onsubscribe");
-        let i = 0;
-        setInterval(() => {
-          i++;
-          console.log("new i", i);
-          updateValueCallback(new Buffer(i));
-        }, 1000);
+        onStepUpdate((data) => {
+          console.log(data.snakeLength);
+          updateValueCallback(new Buffer(data.snakeLength));
+        });
       },
       onUnsubscribe: () => {},
     }),
