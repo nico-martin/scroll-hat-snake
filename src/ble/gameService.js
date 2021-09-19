@@ -56,6 +56,7 @@ module.exports = (setDirection = () => {}, getDirection = () => {}) => ({
           updateValueCallback(new Buffer(i));
         }, 1000);
       },
+      onUnsubscribe: () => {},
     }),
   ],
 });

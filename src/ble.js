@@ -4,9 +4,11 @@ const bleno = require("bleno");
 const deviceInfoService = require("./ble/deviceInfoService");
 const gameService = require("./ble/gameService");
 
-const bluetoothService = async (setDirection, getDirection) => {
+const bluetoothService = async (setDirection, getDirection, onStepUpdate) => {
   const device = deviceInfoService();
   const game = gameService(setDirection, getDirection);
+
+  onStepUpdate((data) => console.log("onStepUpdate", data));
 
   bleno.on("stateChange", (state) => {
     if (state === "poweredOn") {
