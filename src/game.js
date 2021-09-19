@@ -1,4 +1,7 @@
+const events = require("events");
 const { randomIntFromInterval } = require("./helpers");
+
+const STEP_EVENT = "StepEvent";
 
 const DIRECTIONS = {
   UP: "UP",
@@ -7,17 +10,19 @@ const DIRECTIONS = {
   DOWN: "DOWN",
 };
 
-const game = (onStepUpdated, config) => {
+const game = (config) => {
   const { height, width, fps } = {
     width: 17,
     height: 7,
     fps: 5,
     ...config,
   };
+  const em = new events.EventEmitter();
   const field = Array(height).fill(Array(width).fill(0));
   const indexYMax = height - 1;
   const indexXMax = width - 1;
 
+  let gameCount = 0;
   let gameInterval = null;
   let currentDirection = DIRECTIONS.LEFT;
   let snake = [
@@ -30,6 +35,13 @@ const game = (onStepUpdated, config) => {
     x: randomIntFromInterval(0, indexXMax),
     y: randomIntFromInterval(0, indexYMax),
   };
+
+  const startGame = () => {
+    step();
+    gameInterval = setInterval(step, 1000 / fps);
+  };
+
+  const stopGame = () => clearInterval(gameInterval);
 
   const movePixel = ({ x, y }, direction) => {
     switch (direction) {
@@ -56,8 +68,19 @@ const game = (onStepUpdated, config) => {
     }
   };
 
+  const hasColision = (pixel) =>
+    snake.find(
+      (snakePixel) => snakePixel.x === pixel.x && snakePixel.y === pixel.y
+    ) !== undefined;
+
   const step = () => {
     const nextPixel = movePixel(snake[0], currentDirection);
+
+    if (hasColision(nextPixel)) {
+      stopGame();
+      return;
+    }
+
     snake = [nextPixel, ...snake];
 
     if (nextPixel.x === food.x && nextPixel.y === food.y) {
@@ -68,8 +91,6 @@ const game = (onStepUpdated, config) => {
     } else {
       snake.pop();
     }
-
-    // checkForSnakeColision();
 
     const fieldMatrix = field.map((col, colIndex) =>
       col.map((row, rowIndex) =>
@@ -83,20 +104,20 @@ const game = (onStepUpdated, config) => {
       )
     );
 
-    onStepUpdated({
+    em.emit(STEP_EVENT, {
       matrix: fieldMatrix,
       currentDirection,
       snakeLength: snake.length,
+      gameCount,
     });
   };
 
   return {
-    start: () => {
-      step();
-      gameInterval = setInterval(step, 1000 / fps);
-    },
-    stop: () => clearInterval(gameInterval),
+    start: startGame,
+    stop: stopGame,
+    onStepUpdate: (listener) => em.on(STEP_EVENT, listener),
     setDirection: (dir) => {
+      console.log(dir);
       if (Object.values(DIRECTIONS).indexOf(dir) === -1) {
         console.error(`invalid direction ${dir}`);
       } else if (

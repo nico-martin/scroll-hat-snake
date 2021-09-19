@@ -1,20 +1,19 @@
 const game = require("./src/game");
 const { matrixToArray } = require("./src/matrix");
+const bluetoothService = require("./src/ble");
 const scrollController = new (require("scroll-controller"))();
 
 const init = async () => {
   let gameNo = 0;
   await scrollController.init();
+  const gameInstance = game();
 
-  const startGame = () => {
-    gameNo++;
-    const newGame = game((currentGame) => {
-      scrollController.display(matrixToArray(currentGame.matrix));
-    });
-    newGame.start();
-  };
+  await bluetoothService((direction) => gameInstance.setDirection(direction));
 
-  startGame();
+  gameInstance.start();
+  gameInstance.onStepUpdate((currentStep) => {
+    scrollController.display(matrixToArray(currentStep.matrix));
+  });
 };
 
 init();

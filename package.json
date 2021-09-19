@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/nico-martin/scroll-hat-snake#readme",
   "dependencies": {
+    "bleno": "^0.5.0",
     "scroll-controller": "git+https://git@github.com/whatsim/scrollcontroller.git"
   },
   "devDependencies": {
