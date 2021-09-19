@@ -31,7 +31,6 @@ module.exports = (setDirection = () => {}, getDirection = () => {}) => ({
         setDirection(direction);
         callback(Characteristic.RESULT_SUCCESS);
       },
-      value: new Buffer(getDirection()),
       onReadRequest: (offset, callback) => {
         const result = Characteristic.RESULT_SUCCESS;
         const data = new Buffer(getDirection());
