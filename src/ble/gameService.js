@@ -49,6 +49,11 @@ module.exports = (setDirection = () => {}, getDirection = () => {}) => ({
       ],
       onSubscribe: (maxValueSize, updateValueCallback) => {
         console.log("onsubscribe");
+        let i = 0;
+        setInterval(() => {
+          i++;
+          updateValueCallback(new Buffer(i));
+        }, 1000);
       },
     }),
   ],
