@@ -23,7 +23,7 @@ module.exports = (setDirection = () => {}) => ({
         }
 
         if (direction > 4) {
-          console.log("ERROR: value has to be between -100 and 100");
+          console.log("ERROR: value has to be between 0, 1, 2 or 3");
           callback(Characteristic.RESULT_UNLIKELY_ERROR);
           return;
         }

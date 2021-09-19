@@ -116,19 +116,23 @@ const game = (config) => {
     start: startGame,
     stop: stopGame,
     onStepUpdate: (listener) => em.on(STEP_EVENT, listener),
-    setDirection: (dir) => {
-      console.log(dir);
-      if (Object.values(DIRECTIONS).indexOf(dir) === -1) {
-        console.error(`invalid direction ${dir}`);
+    setDirection: (dirIndex) => {
+      const directions = Object.values(DIRECTIONS);
+      if (Object.values(DIRECTIONS)[dirIndex]) {
+        console.error(`invalid direction index ${dirIndex}`);
       } else if (
-        (currentDirection === DIRECTIONS.UP && dir === DIRECTIONS.DOWN) ||
-        (currentDirection === DIRECTIONS.DOWN && dir === DIRECTIONS.UP) ||
-        (currentDirection === DIRECTIONS.LEFT && dir === DIRECTIONS.RIGHT) ||
-        (currentDirection === DIRECTIONS.RIGHT && dir === DIRECTIONS.LEFT)
+        (currentDirection === DIRECTIONS.UP &&
+          dirIndex === directions.findIndex(DIRECTIONS.UP)) ||
+        (currentDirection === DIRECTIONS.DOWN &&
+          dirIndex === directions.findIndex(DIRECTIONS.DOWN)) ||
+        (currentDirection === DIRECTIONS.LEFT &&
+          dirIndex === directions.findIndex(DIRECTIONS.LEFT)) ||
+        (currentDirection === DIRECTIONS.RIGHT &&
+          dirIndex === directions.findIndex(DIRECTIONS.RIGHT))
       ) {
         // can't change to the opposite
       } else {
-        currentDirection = dir;
+        currentDirection = directions[dirIndex];
       }
     },
   };
