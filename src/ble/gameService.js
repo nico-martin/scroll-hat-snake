@@ -10,7 +10,7 @@ module.exports = (setDirection = () => {}, getDirection = () => {}) => ({
       descriptors: [
         new bleno.Descriptor({
           uuid: "95aefc76cf554673967cbeb2e0463311",
-          value: "direction characteristic",
+          value: "direction characteristic (UP: 0, LEFT: 1, RIGHT: 2, DOWN: 3)",
         }),
       ],
       onWriteRequest: (data, offset, withoutResponse, callback) => {
@@ -36,6 +36,19 @@ module.exports = (setDirection = () => {}, getDirection = () => {}) => ({
         const data = new Buffer(getDirection());
 
         callback(result, data);
+      },
+    }),
+    new Characteristic({
+      uuid: "b7d1871e766f4382831f525d14c32d1e",
+      properties: ["notify"],
+      descriptors: [
+        new bleno.Descriptor({
+          uuid: "1c9e2bd81c1b41ada180dc262793e355",
+          value: "snakeLangth value",
+        }),
+      ],
+      onSubscribe: (maxValueSize, updateValueCallback) => {
+        console.log("onsubscribe");
       },
     }),
   ],
