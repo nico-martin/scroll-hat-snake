@@ -5,7 +5,7 @@ const scrollController = new (require("scroll-controller"))();
 
 const init = async () => {
   let gameNo = 0;
-  let currentDirection = null;
+  let currentDirection = 2;
   await scrollController.init();
   const gameInstance = game();
 
