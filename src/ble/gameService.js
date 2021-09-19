@@ -1,7 +1,7 @@
 const bleno = require("bleno");
 const Characteristic = bleno.Characteristic;
 
-module.exports = (setDirection = () => {}) => ({
+module.exports = (setDirection = () => {}, getDirection = () => {}) => ({
   uuid: "75c7c8d271214267b885eb3f4a21faf5",
   characteristics: [
     new Characteristic({
@@ -29,8 +29,14 @@ module.exports = (setDirection = () => {}) => ({
         }
 
         setDirection(direction);
-
         callback(Characteristic.RESULT_SUCCESS);
+      },
+      value: new Buffer(getDirection()),
+      onReadRequest: (offset, callback) => {
+        const result = Characteristic.RESULT_SUCCESS;
+        const data = new Buffer(getDirection());
+
+        callback(result, data);
       },
     }),
   ],
