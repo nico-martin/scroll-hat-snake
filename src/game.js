@@ -122,13 +122,13 @@ const game = (config) => {
         console.error(`invalid direction index ${dirIndex}`);
       } else if (
         (currentDirection === DIRECTIONS.UP &&
-          dirIndex === directions.findIndex(DIRECTIONS.UP)) ||
+          dirIndex === directions.indexOf(DIRECTIONS.UP)) ||
         (currentDirection === DIRECTIONS.DOWN &&
-          dirIndex === directions.findIndex(DIRECTIONS.DOWN)) ||
+          dirIndex === directions.indexOf(DIRECTIONS.DOWN)) ||
         (currentDirection === DIRECTIONS.LEFT &&
-          dirIndex === directions.findIndex(DIRECTIONS.LEFT)) ||
+          dirIndex === directions.indexOf(DIRECTIONS.LEFT)) ||
         (currentDirection === DIRECTIONS.RIGHT &&
-          dirIndex === directions.findIndex(DIRECTIONS.RIGHT))
+          dirIndex === directions.indexOf(DIRECTIONS.RIGHT))
       ) {
         // can't change to the opposite
       } else {
