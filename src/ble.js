@@ -10,7 +10,7 @@ const bluetoothService = async (setDirection) => {
 
   bleno.on("stateChange", (state) => {
     if (state === "poweredOn") {
-      bleno.startAdvertising("SpeedWheels", [device.uuid, game.uuid]);
+      bleno.startAdvertising("Scroll Hat Snake", [device.uuid, game.uuid]);
     } else {
       bleno.stopAdvertising();
     }
