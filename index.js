@@ -11,7 +11,7 @@ const init = async () => {
 
   await bluetoothService(
     (direction) => gameInstance.setDirection(direction),
-    () => currentDirection
+    () => currentDirection.toString()
   );
 
   gameInstance.start();
