@@ -37,6 +37,7 @@ const game = (config) => {
   };
 
   const startGame = () => {
+    gameCount++;
     step();
     gameInterval = setInterval(step, 1000 / fps);
   };

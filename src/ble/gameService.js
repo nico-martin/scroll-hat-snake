@@ -51,13 +51,23 @@ module.exports = (
           value: "snakeLangth value",
         }),
       ],
-      onSubscribe: (maxValueSize, updateValueCallback) => {
-        onStepUpdate((data) => {
-          console.log(data.snakeLength);
-          updateValueCallback(new Buffer(data.snakeLength));
-        });
-      },
-      onUnsubscribe: () => {},
+      onSubscribe: (maxValueSize, updateValueCallback) =>
+        onStepUpdate((data) =>
+          updateValueCallback(new Buffer(data.snakeLength))
+        ),
     }),
+    new Characteristic({
+      uuid: "0144e26e849f415da9c0db05e4a37230",
+      properties: ["notify"],
+      descriptors: [
+        new bleno.Descriptor({
+          uuid: "c709728039bc4e939bc025bcf3e5951a",
+          value: "gameCount value",
+        }),
+      ],
+      onSubscribe: (maxValueSize, updateValueCallback) =>
+        onStepUpdate((data) => updateValueCallback(new Buffer(data.gameCount))),
+    }),
+    // todo add restart option
   ],
 });
