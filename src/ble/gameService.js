@@ -52,6 +52,7 @@ module.exports = (setDirection = () => {}, getDirection = () => {}) => ({
         let i = 0;
         setInterval(() => {
           i++;
+          console.log("new i", i);
           updateValueCallback(new Buffer(i));
         }, 1000);
       },
