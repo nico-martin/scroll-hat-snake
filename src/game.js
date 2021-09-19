@@ -132,6 +132,8 @@ const game = (config) => {
       ) {
         // can't change to the opposite
       } else {
+        console.log(`${currentDirection} === ${DIRECTIONS.UP}`);
+        console.log(`${dirIndex} === ${directions.indexOf(DIRECTIONS.UP)}`);
         currentDirection = directions[dirIndex];
       }
     },
