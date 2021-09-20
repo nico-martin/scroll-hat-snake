@@ -31,15 +31,16 @@ const init = async () => {
       [0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
-    scrollController.display(matrixToArray(snakeScreen));
+    scrollController.display(
+      matrixToArray(snakeScreen).map((led) => (led === 1 ? 100 : 0))
+    );
   };
 
   setStartScreen();
   console.log(3);
 
-  gameInstance.start();
+  //gameInstance.start();
   gameInstance.onStepUpdate((currentStep) => {
-    console.log("step", currentStep);
     currentDirection = currentStep.currentDirection;
     scrollController.display(matrixToArray(currentStep.matrix));
   });
