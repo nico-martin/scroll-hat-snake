@@ -98,9 +98,9 @@ const game = (config) => {
         snake.find(
           (snakePixel) => rowIndex === snakePixel.x && colIndex === snakePixel.y
         ) !== undefined
-          ? 100
+          ? 50
           : rowIndex === food.x && colIndex === food.y
-          ? 200
+          ? 100
           : 0
       )
     );
