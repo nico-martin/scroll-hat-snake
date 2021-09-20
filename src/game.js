@@ -1,5 +1,5 @@
 const events = require("events");
-const { randomIntFromInterval } = require("./helpers");
+const { randomIntFromInterval, wait } = require("./helpers");
 
 const STEP_EVENT = "StepEvent";
 
@@ -44,6 +44,44 @@ const game = (config) => {
 
   const stopGame = () => clearInterval(gameInterval);
 
+  const blinkCurrentScreen = () => {
+    const offScreen = field.map((col, colIndex) =>
+      col.map((row, rowIndex) => 0)
+    );
+    const currentGameScreen = field.map((col, colIndex) =>
+      col.map((row, rowIndex) =>
+        snake.find(
+          (snakePixel) => rowIndex === snakePixel.x && colIndex === snakePixel.y
+        ) !== undefined
+          ? 50
+          : rowIndex === food.x && colIndex === food.y
+          ? 100
+          : 0
+      )
+    );
+
+    let i = 0;
+
+    setInterval(async () => {
+      i++;
+
+      em.emit(STEP_EVENT, {
+        matrix: currentGameScreen,
+        currentDirection,
+        snakeLength: snake.length,
+        gameCount,
+      });
+      await wait(1000);
+      em.emit(STEP_EVENT, {
+        matrix: offScreen,
+        currentDirection,
+        snakeLength: snake.length,
+        gameCount,
+      });
+      await wait(1000);
+    }, 2000);
+  };
+
   const movePixel = ({ x, y }, direction) => {
     switch (direction) {
       case DIRECTIONS.UP:
@@ -79,6 +117,7 @@ const game = (config) => {
 
     if (hasColision(nextPixel)) {
       stopGame();
+      blinkCurrentScreen();
       return;
     }
 
