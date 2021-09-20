@@ -20,6 +20,7 @@ const init = async () => {
 
   gameInstance.start();
   gameInstance.onStepUpdate((currentStep) => {
+    console.log("step", currentStep);
     currentDirection = currentStep.currentDirection;
     scrollController.display(matrixToArray(currentStep.matrix));
   });
