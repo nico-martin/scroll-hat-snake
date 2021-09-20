@@ -12,11 +12,14 @@ const init = async () => {
   await scrollController.init();
   const gameInstance = game();
 
+  console.log(1);
+
   await bluetoothService(
     (direction) => gameInstance.setDirection(direction),
     () => currentDirection.toString(),
     gameInstance.onStepUpdate
   );
+  console.log(2);
 
   const setStartScreen = () => {
     const snakeScreen = [
@@ -32,6 +35,7 @@ const init = async () => {
   };
 
   setStartScreen();
+  console.log(3);
 
   //gameInstance.start();
   gameInstance.onStepUpdate((currentStep) => {
