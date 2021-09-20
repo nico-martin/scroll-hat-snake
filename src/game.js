@@ -62,24 +62,24 @@ const game = (config) => {
 
     let i = 0;
 
-    setInterval(async () => {
+    const blinkInterval = setInterval(async () => {
       i++;
-
+      i === 3 && clearInterval(blinkInterval);
       em.emit(STEP_EVENT, {
         matrix: currentGameScreen,
         currentDirection,
         snakeLength: snake.length,
         gameCount,
       });
-      await wait(1000);
+      await wait(700);
       em.emit(STEP_EVENT, {
         matrix: offScreen,
         currentDirection,
         snakeLength: snake.length,
         gameCount,
       });
-      await wait(1000);
-    }, 2000);
+      await wait(700);
+    }, 1400);
   };
 
   const movePixel = ({ x, y }, direction) => {
