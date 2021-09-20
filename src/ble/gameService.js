@@ -68,6 +68,5 @@ module.exports = (
       onSubscribe: (maxValueSize, updateValueCallback) =>
         onStepUpdate((data) => updateValueCallback(new Buffer(data.gameCount))),
     }),
-    // todo add restart option
   ],
 });
