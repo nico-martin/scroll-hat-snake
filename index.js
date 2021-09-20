@@ -18,7 +18,22 @@ const init = async () => {
     gameInstance.onStepUpdate
   );
 
-  gameInstance.start();
+  const setStartScreen = () => {
+    const snakeScreen = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    scrollController.display(matrixToArray(snakeScreen));
+  };
+
+  setStartScreen();
+
+  //gameInstance.start();
   gameInstance.onStepUpdate((currentStep) => {
     console.log("step", currentStep);
     currentDirection = currentStep.currentDirection;

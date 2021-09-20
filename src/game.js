@@ -38,9 +38,8 @@ const game = (config) => {
 
   const startGame = () => {
     gameCount++;
-    setStartScreen();
-    //step();
-    //gameInterval = setInterval(step, 1000 / fps);
+    step();
+    gameInterval = setInterval(step, 1000 / fps);
   };
 
   const stopGame = () => clearInterval(gameInterval);
@@ -88,24 +87,6 @@ const game = (config) => {
       }, 1400);
     });
 
-  const setStartScreen = () => {
-    const snakeScreen = [
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    ];
-    em.emit(STEP_EVENT, {
-      matrix: snakeScreen,
-      currentDirection,
-      snakeLength: snake.length,
-      gameCount,
-    });
-  };
-
   const movePixel = ({ x, y }, direction) => {
     switch (direction) {
       case DIRECTIONS.UP:
@@ -142,7 +123,6 @@ const game = (config) => {
     if (hasColision(nextPixel)) {
       stopGame();
       await blinkCurrentScreen();
-      setStartScreen();
       return;
     }
 
