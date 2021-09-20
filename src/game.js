@@ -38,48 +38,72 @@ const game = (config) => {
 
   const startGame = () => {
     gameCount++;
-    step();
-    gameInterval = setInterval(step, 1000 / fps);
+    setStartScreen();
+    //step();
+    //gameInterval = setInterval(step, 1000 / fps);
   };
 
   const stopGame = () => clearInterval(gameInterval);
 
-  const blinkCurrentScreen = () => {
-    const offScreen = field.map((col, colIndex) =>
-      col.map((row, rowIndex) => 0)
-    );
-    const currentGameScreen = field.map((col, colIndex) =>
-      col.map((row, rowIndex) =>
-        snake.find(
-          (snakePixel) => rowIndex === snakePixel.x && colIndex === snakePixel.y
-        ) !== undefined
-          ? 50
-          : rowIndex === food.x && colIndex === food.y
-          ? 100
-          : 0
-      )
-    );
+  const blinkCurrentScreen = () =>
+    new Promise((resolve) => {
+      const offScreen = field.map((col, colIndex) =>
+        col.map((row, rowIndex) => 0)
+      );
+      const currentGameScreen = field.map((col, colIndex) =>
+        col.map((row, rowIndex) =>
+          snake.find(
+            (snakePixel) =>
+              rowIndex === snakePixel.x && colIndex === snakePixel.y
+          ) !== undefined
+            ? 50
+            : rowIndex === food.x && colIndex === food.y
+            ? 100
+            : 0
+        )
+      );
 
-    let i = 0;
+      let i = 0;
 
-    const blinkInterval = setInterval(async () => {
-      i++;
-      i === 3 && clearInterval(blinkInterval);
-      em.emit(STEP_EVENT, {
-        matrix: currentGameScreen,
-        currentDirection,
-        snakeLength: snake.length,
-        gameCount,
-      });
-      await wait(700);
-      em.emit(STEP_EVENT, {
-        matrix: offScreen,
-        currentDirection,
-        snakeLength: snake.length,
-        gameCount,
-      });
-      await wait(700);
-    }, 1400);
+      const blinkInterval = setInterval(async () => {
+        i++;
+        if (i === 3) {
+          clearInterval(blinkInterval);
+          resolve();
+        }
+        em.emit(STEP_EVENT, {
+          matrix: offScreen,
+          currentDirection,
+          snakeLength: snake.length,
+          gameCount,
+        });
+        await wait(700);
+        em.emit(STEP_EVENT, {
+          matrix: currentGameScreen,
+          currentDirection,
+          snakeLength: snake.length,
+          gameCount,
+        });
+        await wait(700);
+      }, 1400);
+    });
+
+  const setStartScreen = () => {
+    const snakeScreen = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    em.emit(STEP_EVENT, {
+      matrix: snakeScreen,
+      currentDirection,
+      snakeLength: snake.length,
+      gameCount,
+    });
   };
 
   const movePixel = ({ x, y }, direction) => {
@@ -112,12 +136,13 @@ const game = (config) => {
       (snakePixel) => snakePixel.x === pixel.x && snakePixel.y === pixel.y
     ) !== undefined;
 
-  const step = () => {
+  const step = async () => {
     const nextPixel = movePixel(snake[0], currentDirection);
 
     if (hasColision(nextPixel)) {
       stopGame();
-      blinkCurrentScreen();
+      await blinkCurrentScreen();
+      setStartScreen();
       return;
     }
 
