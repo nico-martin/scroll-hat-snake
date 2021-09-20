@@ -37,7 +37,7 @@ const init = async () => {
   setStartScreen();
   console.log(3);
 
-  //gameInstance.start();
+  gameInstance.start();
   gameInstance.onStepUpdate((currentStep) => {
     console.log("step", currentStep);
     currentDirection = currentStep.currentDirection;
