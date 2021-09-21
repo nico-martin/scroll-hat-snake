@@ -1,3 +1,5 @@
+const events = require("events");
+const em = new events.EventEmitter();
 const game = require("./src/game");
 const { matrixToArray } = require("./src/matrix");
 const bluetoothService = require("./src/ble");
@@ -11,22 +13,29 @@ const init = async () => {
   const width = 17;
   const height = 7;
   const field = Array(height).fill(Array(width).fill(0));
+  let intensity = 100;
+  const setIntensity = (newIntensity) => {
+    intensity = newIntensity;
+    em.emit("INTENSITY_UPDATE", intensity);
+  };
+  const onIntensityUpdate = (listener) => em.emit("INTENSITY_UPDATE", listener);
+
   const generateMatrixFromGame = (gameState) =>
     field.map((col, colIndex) =>
       col.map((row, rowIndex) =>
         gameState.snake.find(
           (snakePixel) => rowIndex === snakePixel.x && colIndex === snakePixel.y
         ) !== undefined
-          ? 50
+          ? intensity / 2
           : rowIndex === gameState.food.x && colIndex === gameState.food.y
-          ? 100
+          ? intensity
           : 0
       )
     );
   await scrollController.init();
   const gameInstance = game();
 
-  await bluetoothService(gameInstance);
+  await bluetoothService(gameInstance, setIntensity, onIntensityUpdate);
 
   /*
   const setStartScreen = () => {

@@ -40,7 +40,11 @@ const game = (config) => {
   ];
 
   const generateFood = (snake = null) => {
-    let food = {};
+    let food = {
+      x: randomIntFromInterval(0, indexXMax),
+      y: randomIntFromInterval(0, indexYMax),
+    };
+    return;
     let validPositionFound = false;
     while (validPositionFound) {
       food = {

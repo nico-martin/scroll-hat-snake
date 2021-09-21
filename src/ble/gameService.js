@@ -1,7 +1,7 @@
 const bleno = require("bleno");
 const Characteristic = bleno.Characteristic;
 
-module.exports = (gameInstance) => {
+module.exports = (gameInstance, setIntensity, onIntensityUpdate) => {
   let direction = "";
   gameInstance.onStepUpdate((gameState) => {
     direction = gameState.direction;
@@ -79,16 +79,15 @@ module.exports = (gameInstance) => {
         descriptors: [
           new bleno.Descriptor({
             uuid: "5e22577957a14bcabf7ec7f7a6a529ba",
-            value: "gameState value",
+            value: "LED intensity (0-255)",
           }),
         ],
         onSubscribe: (maxValueSize, updateValueCallback) =>
-          gameInstance.onStepUpdate((data) =>
-            updateValueCallback(new Buffer(data.gameState))
+          onIntensityUpdate((intensity) =>
+            updateValueCallback(new Buffer(intensity))
           ),
         onWriteRequest: (data, offset, withoutResponse, callback) => {
-          const state = data.readUInt8(0);
-          //const methods = [gameInstance.start]
+          const intensity = data.readUInt8(0);
 
           if (data.length !== 1) {
             console.log("ERROR: invalid data", data);
@@ -96,13 +95,7 @@ module.exports = (gameInstance) => {
             return;
           }
 
-          if (state > 3) {
-            console.log("ERROR: value has to be between 0, 1, 2 or 3");
-            callback(Characteristic.RESULT_UNLIKELY_ERROR);
-            return;
-          }
-
-          //gameInstance.setState(state);
+          setIntensity(intensity);
           callback(Characteristic.RESULT_SUCCESS);
         },
       }),
