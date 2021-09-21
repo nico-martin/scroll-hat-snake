@@ -44,7 +44,7 @@ const game = (config) => {
       x: randomIntFromInterval(0, indexXMax),
       y: randomIntFromInterval(0, indexYMax),
     };
-    return;
+    return food;
     let validPositionFound = false;
     while (validPositionFound) {
       food = {
