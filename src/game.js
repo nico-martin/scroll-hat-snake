@@ -16,14 +16,10 @@ const GAME_STATES = {
   PAUSE: "PAUSE",
 };
 
-const hasColision = (pixel, snake) => {
-  console.log("hasColision", pixel, snake);
-  return (
-    snake.find(
-      (snakePixel) => snakePixel.x === pixel.x && snakePixel.y === pixel.y
-    ) !== undefined
-  );
-};
+const hasColision = (pixel, snake) =>
+  snake.find(
+    (snakePixel) => snakePixel.x === pixel.x && snakePixel.y === pixel.y
+  ) !== undefined;
 
 const game = (config) => {
   const { height, width, fps } = {
@@ -45,10 +41,6 @@ const game = (config) => {
   ];
 
   const generateFood = (snake = null) => {
-    return {
-      x: randomIntFromInterval(0, indexXMax),
-      y: randomIntFromInterval(0, indexYMax),
-    };
     let food = {};
     let validPositionFound = false;
     while (validPositionFound) {
