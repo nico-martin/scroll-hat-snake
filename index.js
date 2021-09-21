@@ -8,7 +8,6 @@ const scrollController = new (require("scroll-controller"))();
 // todo: add gameStat Screen (start = game, stop = "SNAKE", pause = game but no steps running)
 
 const init = async () => {
-  let currentDirection = null;
   const width = 17;
   const height = 7;
   const field = Array(height).fill(Array(width).fill(0));
@@ -27,12 +26,7 @@ const init = async () => {
   await scrollController.init();
   const gameInstance = game();
 
-  await bluetoothService(
-    (direction) => gameInstance.setDirection(direction),
-    () => currentDirection.toString(),
-    () => gameInstance.start(),
-    gameInstance.onStepUpdate
-  );
+  await bluetoothService(gameInstance);
 
   /*
   const setStartScreen = () => {
@@ -53,7 +47,6 @@ const init = async () => {
   setStartScreen();*/
   gameInstance.start(true);
   gameInstance.onStepUpdate((gameState) => {
-    currentDirection = gameState.direction;
     scrollController.display(matrixToArray(generateMatrixFromGame(gameState)));
   });
 };

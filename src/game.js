@@ -29,7 +29,6 @@ const game = (config) => {
     ...config,
   };
   const em = new events.EventEmitter();
-  const field = Array(height).fill(Array(width).fill(0));
   const indexYMax = height - 1;
   const indexXMax = width - 1;
 
