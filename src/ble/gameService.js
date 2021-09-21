@@ -90,13 +90,13 @@ module.exports = (
         ],
         onReadRequest: (offset, callback) => {
           const result = Characteristic.RESULT_SUCCESS;
-          const data = new Buffer(intensity);
+          const data = new Buffer(intensity.toString(16));
 
           callback(result, data);
         },
         onSubscribe: (maxValueSize, updateValueCallback) =>
           onIntensityUpdate((intensity) =>
-            updateValueCallback(new Buffer(intensity))
+            updateValueCallback(new Buffer(intensity.toString(16)))
           ),
         onWriteRequest: (data, offset, withoutResponse, callback) => {
           const intensity = data.readUInt8(0);
