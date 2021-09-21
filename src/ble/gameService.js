@@ -88,7 +88,12 @@ module.exports = (
             value: "LED intensity (0-255)",
           }),
         ],
-        value: new Buffer(intensity),
+        onReadRequest: (offset, callback) => {
+          const result = Characteristic.RESULT_SUCCESS;
+          const data = new Buffer(intensity);
+
+          callback(result, data);
+        },
         onSubscribe: (maxValueSize, updateValueCallback) =>
           onIntensityUpdate((intensity) =>
             updateValueCallback(new Buffer(intensity))
