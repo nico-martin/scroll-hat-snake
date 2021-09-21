@@ -11,8 +11,8 @@ const DIRECTIONS = {
 };
 
 const GAME_STATES = {
-  STOP: "STOP",
   START: "START",
+  STOP: "STOP",
   PAUSE: "PAUSE",
 };
 
