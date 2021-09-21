@@ -151,6 +151,7 @@ const game = (config) => {
 
   const generateNextStap = async () => {
     if (gameState.gameState === GAME_STATES.STOP) {
+      console.log("STOP IT NOE");
       stopGame();
     }
     const nextPixel = getNextPixel(gameState.snake[0], gameState.direction);
