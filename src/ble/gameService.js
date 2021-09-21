@@ -5,6 +5,7 @@ module.exports = (
   gameInstance,
   [intensity, setIntensity, onIntensityUpdate]
 ) => {
+  let gameState = gameInstance.gameState;
   let direction = "";
   gameInstance.onStepUpdate((gameState) => {
     direction = gameState.direction;
@@ -108,6 +109,53 @@ module.exports = (
           }
 
           setIntensity(intensity);
+          callback(Characteristic.RESULT_SUCCESS);
+        },
+      }),
+      new Characteristic({
+        uuid: "015703a5edf14559939ee70adb14916d",
+        properties: ["notify", "write", "read"],
+        descriptors: [
+          new bleno.Descriptor({
+            uuid: "f886edf699cf4e73-84598d2daf2d5d02",
+            value: "gameState",
+          }),
+        ],
+        onReadRequest: (offset, callback) => {
+          const result = Characteristic.RESULT_SUCCESS;
+          const data = new Buffer(gameState);
+
+          callback(result, data);
+        },
+        onSubscribe: (maxValueSize, updateValueCallback) =>
+          gameInstance.onStepUpdate((data) => {
+            if (gameState !== data.gameState) {
+              gameState = data.gameState;
+              updateValueCallback(new Buffer(data.gameState));
+            }
+          }),
+        onWriteRequest: (data, offset, withoutResponse, callback) => {
+          const state = data.readUInt8(0);
+          const methods = [
+            () => gameInstance.start(),
+            () => gameInstance.start(true),
+            () => gameInstance.stop(),
+            () => gameInstance.pause(),
+          ];
+
+          if (data.length !== 1) {
+            console.log("ERROR: invalid data", data);
+            callback(this.RESULT_INVALID_ATTRIBUTE_LENGTH);
+            return;
+          }
+          if (state >= methods.length) {
+            console.log(
+              "ERROR: value has to be 0 (start), 1 (restart), 2 (stop), or 3 (pause)"
+            );
+            callback(Characteristic.RESULT_UNLIKELY_ERROR);
+            return;
+          }
+
           callback(Characteristic.RESULT_SUCCESS);
         },
       }),
