@@ -68,6 +68,7 @@ const game = (config) => {
   };
 
   const updateGameState = (partialState) => {
+    console.log("UPDATE", partialState);
     gameState = { ...gameState, ...partialState };
     em.emit(UPDATE_EVENT, gameState);
   };

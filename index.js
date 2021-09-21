@@ -53,7 +53,7 @@ const init = async () => {
   setStartScreen();*/
   gameInstance.start(true);
   gameInstance.onStepUpdate((gameState) => {
-    console.log(gameState);
+    //console.log(gameState);
     currentDirection = gameState.direction;
     scrollController.display(matrixToArray(generateMatrixFromGame(gameState)));
   });
