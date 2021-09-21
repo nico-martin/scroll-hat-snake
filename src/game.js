@@ -160,12 +160,13 @@ const game = (config) => {
       stopGame();
     }
     const nextPixel = getNextPixel(gameState.snake[0], gameState.direction);
-    const newSnake = [nextPixel, ...gameState.snake];
-    const snakeWithoutFood = newSnake.filter(
+    const oldSnakeWithoutFood = gameState.snake.filter(
       (pixel, i, full) => i !== full.length - 1
     );
+    const newSnake = [nextPixel, ...oldSnakeWithoutFood];
+    const snakeWithoutFood = [nextPixel, ...gameState.snake];
 
-    if (hasColision(nextPixel, snakeWithoutFood)) {
+    if (hasColision(nextPixel, oldSnakeWithoutFood)) {
       return updateGameState({
         gameState: GAME_STATES.STOP,
       });
