@@ -1,7 +1,7 @@
 const events = require("events");
 const { randomIntFromInterval, wait } = require("./helpers");
 
-const STEP_EVENT = "StepEvent";
+const UPDATE_EVENT = "UpdateEvent";
 
 const DIRECTIONS = {
   UP: "UP",
@@ -9,6 +9,17 @@ const DIRECTIONS = {
   RIGHT: "RIGHT",
   DOWN: "DOWN",
 };
+
+const GAME_STATES = {
+  STOP: "STOP",
+  START: "START",
+  PAUSE: "PAUSE",
+};
+
+const hasColision = (pixel, snake) =>
+  snake.find(
+    (snakePixel) => snakePixel.x === pixel.x && snakePixel.y === pixel.y
+  ) !== undefined;
 
 const game = (config) => {
   const { height, width, fps } = {
@@ -22,46 +33,68 @@ const game = (config) => {
   const indexYMax = height - 1;
   const indexXMax = width - 1;
 
-  let gameCount = 0;
-  let gameInterval = null;
-  let currentDirection = DIRECTIONS.RIGHT;
-  let snake = [
+  const generateStartSnake = () => [
     {
       x: 1,
       y: 1,
     },
   ];
-  let food = {
-    x: randomIntFromInterval(0, indexXMax),
-    y: randomIntFromInterval(0, indexYMax),
+
+  const generateFood = (snake = null) => {
+    let food = {};
+    let validPositionFound = false;
+    while (validPositionFound) {
+      food = {
+        x: randomIntFromInterval(0, indexXMax),
+        y: randomIntFromInterval(0, indexYMax),
+      };
+      if (!hasColision(food, snake)) {
+        validPositionFound = true;
+      }
+    }
+    return food;
+  };
+
+  let gameState = {
+    direction: DIRECTIONS.RIGHT,
+    snake: generateStartSnake(),
+    food: generateFood(),
+    gameCount: 0,
+    gameState: Object.values(GAME_STATES)[0],
+  };
+
+  const updateGameState = (partialState) => {
+    gameState = { ...gameState, ...partialState };
+    em.emit(UPDATE_EVENT, gameState);
+  };
+
+  let gameInterval = null;
+
+  const setUpNewGame = () => {
+    const newSnake = generateStartSnake();
+    const newFood = generateFood(newSnake);
+    updateGameState({
+      direction: DIRECTIONS.RIGHT,
+      snake: newSnake,
+      food: newFood,
+      gameCount: gameState.gameCount + 1,
+    });
   };
 
   const startGame = () => {
-    gameCount++;
-    step();
-    gameInterval = setInterval(step, 1000 / fps);
+    gameInterval = setInterval(generateNextStap, 1000 / fps);
   };
 
-  const stopGame = () => clearInterval(gameInterval);
+  const stopGame = (pause = false) => {
+    clearInterval(gameInterval);
+    updateGameState({
+      gameState: pause ? GAME_STATES.PAUSE : GAME_STATES.STOP,
+    });
+  };
 
+  /*
   const blinkCurrentScreen = () =>
     new Promise((resolve) => {
-      const offScreen = field.map((col, colIndex) =>
-        col.map((row, rowIndex) => 0)
-      );
-      const currentGameScreen = field.map((col, colIndex) =>
-        col.map((row, rowIndex) =>
-          snake.find(
-            (snakePixel) =>
-              rowIndex === snakePixel.x && colIndex === snakePixel.y
-          ) !== undefined
-            ? 50
-            : rowIndex === food.x && colIndex === food.y
-            ? 100
-            : 0
-        )
-      );
-
       let i = 0;
 
       const blinkInterval = setInterval(async () => {
@@ -85,9 +118,9 @@ const game = (config) => {
         });
         await wait(700);
       }, 1400);
-    });
+    });*/
 
-  const movePixel = ({ x, y }, direction) => {
+  const getNextPixel = ({ x, y }, direction) => {
     switch (direction) {
       case DIRECTIONS.UP:
         return {
@@ -112,72 +145,55 @@ const game = (config) => {
     }
   };
 
-  const hasColision = (pixel) =>
-    snake.find(
-      (snakePixel) => snakePixel.x === pixel.x && snakePixel.y === pixel.y
-    ) !== undefined;
-
-  const step = async () => {
-    const nextPixel = movePixel(snake[0], currentDirection);
-
-    if (hasColision(nextPixel)) {
-      stopGame();
-      await blinkCurrentScreen();
-      return;
-    }
-
-    snake = [nextPixel, ...snake];
-
-    if (nextPixel.x === food.x && nextPixel.y === food.y) {
-      food = {
-        x: randomIntFromInterval(0, indexXMax),
-        y: randomIntFromInterval(0, indexYMax),
-      };
-    } else {
-      snake.pop();
-    }
-
-    const fieldMatrix = field.map((col, colIndex) =>
-      col.map((row, rowIndex) =>
-        snake.find(
-          (snakePixel) => rowIndex === snakePixel.x && colIndex === snakePixel.y
-        ) !== undefined
-          ? 50
-          : rowIndex === food.x && colIndex === food.y
-          ? 100
-          : 0
-      )
+  const generateNextStap = async () => {
+    const nextPixel = getNextPixel(gameState.snake[0], gameState.direction);
+    const newSnake = [nextPixel, ...gameState.snake];
+    const snakeWithoutFood = newSnake.filter(
+      (pixel, i, full) => i !== full.length - 1
     );
 
-    em.emit(STEP_EVENT, {
-      matrix: fieldMatrix,
-      currentDirection,
-      snakeLength: snake.length,
-      gameCount,
+    if (hasColision(nextPixel, snakeWithoutFood)) {
+      stopGame();
+    }
+
+    const foundFood =
+      nextPixel.x === gameState.food.x && nextPixel.y === gameState.food.y;
+
+    const snake = foundFood ? newSnake : snakeWithoutFood;
+
+    updateGameState({
+      snake,
+      food: foundFood ? generateFood() : gameState.food,
     });
   };
 
   return {
-    start: startGame,
-    stop: stopGame,
-    onStepUpdate: (listener) => em.on(STEP_EVENT, listener),
+    start: (reset = true) => {
+      reset && setUpNewGame();
+      startGame();
+    },
+    stop: () => stopGame(),
+    pause: () => stopGame(true),
+    onStepUpdate: (listener) => em.on(UPDATE_EVENT, listener),
     setDirection: (dirIndex) => {
       const directions = Object.values(DIRECTIONS);
       if (!Object.values(DIRECTIONS)[dirIndex]) {
         console.error(`invalid direction index ${dirIndex}`);
       } else if (
-        (currentDirection === DIRECTIONS.UP &&
+        (gameState.direction === DIRECTIONS.UP &&
           dirIndex === directions.indexOf(DIRECTIONS.DOWN)) ||
-        (currentDirection === DIRECTIONS.DOWN &&
+        (gameState.direction === DIRECTIONS.DOWN &&
           dirIndex === directions.indexOf(DIRECTIONS.UP)) ||
-        (currentDirection === DIRECTIONS.LEFT &&
+        (gameState.direction === DIRECTIONS.LEFT &&
           dirIndex === directions.indexOf(DIRECTIONS.RIGHT)) ||
-        (currentDirection === DIRECTIONS.RIGHT &&
+        (gameState.direction === DIRECTIONS.RIGHT &&
           dirIndex === directions.indexOf(DIRECTIONS.LEFT))
       ) {
         // can't change to the opposite
       } else {
-        currentDirection = directions[dirIndex];
+        updateGameState({
+          direction: directions[dirIndex],
+        });
       }
     },
   };

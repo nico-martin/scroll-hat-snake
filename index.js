@@ -9,26 +9,39 @@ const scrollController = new (require("scroll-controller"))();
 
 const init = async () => {
   let currentDirection = null;
+  const width = 17;
+  const height = 7;
+  const field = Array(height).fill(Array(width).fill(0));
+  const generateMatrixFromGame = (gameState) =>
+    field.map((col, colIndex) =>
+      col.map((row, rowIndex) =>
+        gameState.snake.find(
+          (snakePixel) => rowIndex === snakePixel.x && colIndex === snakePixel.y
+        ) !== undefined
+          ? 50
+          : rowIndex === gameState.food.x && colIndex === gameState.food.y
+          ? 100
+          : 0
+      )
+    );
   await scrollController.init();
   const gameInstance = game();
-
-  console.log(1);
 
   await bluetoothService(
     (direction) => gameInstance.setDirection(direction),
     () => currentDirection.toString(),
+    () => gameInstance.start(),
     gameInstance.onStepUpdate
   );
-  console.log(2);
 
   const setStartScreen = () => {
     const snakeScreen = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
     scrollController.display(
@@ -37,12 +50,10 @@ const init = async () => {
   };
 
   setStartScreen();
-  console.log(3);
 
-  //gameInstance.start();
-  gameInstance.onStepUpdate((currentStep) => {
-    currentDirection = currentStep.currentDirection;
-    scrollController.display(matrixToArray(currentStep.matrix));
+  gameInstance.onStepUpdate((gameState) => {
+    currentDirection = gameState.direction;
+    scrollController.display(matrixToArray(generateMatrixFromGame(gameState)));
   });
 };
 

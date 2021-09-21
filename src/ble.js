@@ -4,7 +4,12 @@ const bleno = require("bleno");
 const deviceInfoService = require("./ble/deviceInfoService");
 const gameService = require("./ble/gameService");
 
-const bluetoothService = async (setDirection, getDirection, onStepUpdate) => {
+const bluetoothService = async (
+  setDirection,
+  getDirection,
+  start,
+  onStepUpdate
+) => {
   const device = deviceInfoService();
   const game = gameService(setDirection, getDirection, onStepUpdate);
 
