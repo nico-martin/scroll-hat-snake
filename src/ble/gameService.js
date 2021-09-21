@@ -123,6 +123,7 @@ module.exports = (
         ],
         onReadRequest: (offset, callback) => {
           const result = Characteristic.RESULT_SUCCESS;
+          console.log("gameState", gameState);
           const data = new Buffer(gameState);
 
           callback(result, data);
