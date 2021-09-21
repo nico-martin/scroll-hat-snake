@@ -5,10 +5,11 @@ module.exports = (
   gameInstance,
   [intensity, setIntensity, onIntensityUpdate]
 ) => {
-  let gameState = gameInstance.gameState;
+  let gameState = "";
   let direction = "";
-  gameInstance.onStepUpdate((gameState) => {
-    direction = gameState.direction;
+  gameInstance.onStepUpdate((currentGameState) => {
+    direction = currentGameState.direction;
+    gameState = currentGameState.gameState;
   });
   onIntensityUpdate((newIntensity) => {
     intensity = newIntensity;
