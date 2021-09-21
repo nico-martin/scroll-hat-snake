@@ -158,6 +158,7 @@ module.exports = (
             return;
           }
 
+          methods[state]();
           callback(Characteristic.RESULT_SUCCESS);
         },
       }),
