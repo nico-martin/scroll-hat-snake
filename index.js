@@ -27,7 +27,7 @@ const init = async () => {
         gameState.snake.find(
           (snakePixel) => rowIndex === snakePixel.x && colIndex === snakePixel.y
         ) !== undefined
-          ? intensity / 2
+          ? Math.floor(intensity / 2)
           : rowIndex === gameState.food.x && colIndex === gameState.food.y
           ? intensity
           : 0
