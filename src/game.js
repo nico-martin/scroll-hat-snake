@@ -72,7 +72,6 @@ const game = (config) => {
   };
 
   const updateGameState = (partialState) => {
-    console.log("UPDATE", partialState);
     gameState = { ...gameState, ...partialState };
     em.emit(UPDATE_EVENT, gameState);
   };
@@ -156,15 +155,14 @@ const game = (config) => {
 
   const generateNextStap = async () => {
     if (gameState.gameState === GAME_STATES.STOP) {
-      console.log("STOP IT NOE");
       stopGame();
     }
     const nextPixel = getNextPixel(gameState.snake[0], gameState.direction);
     const oldSnakeWithoutFood = gameState.snake.filter(
       (pixel, i, full) => i !== full.length - 1
     );
-    const newSnake = [nextPixel, ...oldSnakeWithoutFood];
-    const snakeWithoutFood = [nextPixel, ...gameState.snake];
+    const newSnake = [nextPixel, ...gameState.snake];
+    const snakeWithoutFood = [nextPixel, ...oldSnakeWithoutFood];
 
     if (hasColision(nextPixel, oldSnakeWithoutFood)) {
       return updateGameState({
