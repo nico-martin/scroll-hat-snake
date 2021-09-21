@@ -1,10 +1,16 @@
 const bleno = require("bleno");
 const Characteristic = bleno.Characteristic;
 
-module.exports = (gameInstance, setIntensity, onIntensityUpdate) => {
+module.exports = (
+  gameInstance,
+  [intensity, setIntensity, onIntensityUpdate]
+) => {
   let direction = "";
   gameInstance.onStepUpdate((gameState) => {
     direction = gameState.direction;
+  });
+  onIntensityUpdate((newIntensity) => {
+    intensity = newIntensity;
   });
 
   return {
@@ -82,6 +88,7 @@ module.exports = (gameInstance, setIntensity, onIntensityUpdate) => {
             value: "LED intensity (0-255)",
           }),
         ],
+        value: new Buffer(intensity),
         onSubscribe: (maxValueSize, updateValueCallback) =>
           onIntensityUpdate((intensity) =>
             updateValueCallback(new Buffer(intensity))
