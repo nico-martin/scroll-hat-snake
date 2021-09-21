@@ -64,7 +64,7 @@ module.exports = (
         ],
         onSubscribe: (maxValueSize, updateValueCallback) =>
           gameInstance.onStepUpdate((data) =>
-            updateValueCallback(new Buffer(data.snake.length))
+            updateValueCallback(new Buffer(data.snake.length.toString(16)))
           ),
       }),
       new Characteristic({
