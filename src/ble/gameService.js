@@ -81,7 +81,7 @@ module.exports = (
       }),
       new Characteristic({
         uuid: "0e5781c5d5b5402c82f8307e4350f5ce",
-        properties: ["notify", "write"],
+        properties: ["notify", "write", "read"],
         descriptors: [
           new bleno.Descriptor({
             uuid: "5e22577957a14bcabf7ec7f7a6a529ba",
