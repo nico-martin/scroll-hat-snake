@@ -64,7 +64,7 @@ const game = (config) => {
     snake: generateStartSnake(),
     food: generateFood(),
     gameCount: 0,
-    gameState: Object.values(GAME_STATES)[0],
+    gameState: GAME_STATES.START,
   };
 
   const updateGameState = (partialState) => {
@@ -150,6 +150,9 @@ const game = (config) => {
   };
 
   const generateNextStap = async () => {
+    if (gameState.gameState === GAME_STATES.STOP) {
+      stopGame();
+    }
     const nextPixel = getNextPixel(gameState.snake[0], gameState.direction);
     const newSnake = [nextPixel, ...gameState.snake];
     const snakeWithoutFood = newSnake.filter(
@@ -157,7 +160,9 @@ const game = (config) => {
     );
 
     if (hasColision(nextPixel, snakeWithoutFood)) {
-      stopGame();
+      return updateGameState({
+        gameState: GAME_STATES.STOP,
+      });
     }
 
     const foundFood =
