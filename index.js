@@ -18,13 +18,12 @@ const init = async () => {
     intensity = newIntensity;
     em.emit("INTENSITY_UPDATE", intensity);
   };
-  await battery((values) => {
-    console.log("values", values);
-    em.emit("BATTERY_UPDATE", values);
-  });
+  await battery((values) => em.emit("BATTERY_UPDATE", values));
 
   const onIntensityUpdate = (listener) => em.emit("INTENSITY_UPDATE", listener);
   const onBatteryUpdate = (listener) => em.emit("BATTERY_UPDATE", listener);
+
+  onBatteryUpdate((v) => console.log("ijewidewdwo", v));
 
   const generateMatrixFromGame = (gameState) =>
     field.map((col, colIndex) =>
