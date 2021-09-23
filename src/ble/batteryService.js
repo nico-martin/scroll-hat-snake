@@ -44,6 +44,12 @@ module.exports = (onBatteryUpdate) => {
           onBatteryUpdate((battery) =>
             updateValueCallback(new Buffer([battery.isLoading ? 1 : 0]))
           ),
+        descriptors: [
+          new bleno.Descriptor({
+            uuid: "75395025043045b181bdd1ad1b535b8f",
+            value: "is Loading: 0 = false, 1 = true",
+          }),
+        ],
       }),
     ],
   };
