@@ -19,6 +19,7 @@ const init = async () => {
     em.emit("INTENSITY_UPDATE", intensity);
   };
   await battery((values) => {
+    console.log("values", values);
     em.emit("BATTERY_UPDATE", values);
   });
 

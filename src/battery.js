@@ -22,7 +22,6 @@ const battery = async (listener, timeoutInterval = 2000) => {
     if (newLevel !== level || newIsLoading !== isLoading) {
       isLoading = newIsLoading;
       level = newLevel;
-      console.log({ level, isLoading });
       listener({
         isLoading,
         level,
