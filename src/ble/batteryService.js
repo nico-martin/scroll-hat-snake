@@ -7,9 +7,9 @@ const battery = require("../battery");
 // https://btprodspecificationrefs.blob.core.windows.net/assigned-values/16-bit%20UUID%20Numbers%20Document.pdf
 
 module.exports = (onBatteryUpdate) => {
-  let level = 0;
+  let level = "0";
   onBatteryUpdate((battery) => {
-    level = parseInt(battery.level);
+    level = battery.level;
   });
 
   return {
@@ -20,7 +20,7 @@ module.exports = (onBatteryUpdate) => {
         properties: ["read"],
         onReadRequest: (offset, callback) => {
           const result = Characteristic.RESULT_SUCCESS;
-          const data = new Buffer(level);
+          const data = new Buffer(level, "hex");
           console.log("LEVEL", level, data);
 
           callback(result, data);
