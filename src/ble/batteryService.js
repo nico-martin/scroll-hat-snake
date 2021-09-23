@@ -9,7 +9,7 @@ const battery = require("../battery");
 module.exports = (onBatteryUpdate) => {
   let level = 0;
   onBatteryUpdate((battery) => {
-    level = battery.level;
+    level = parseInt(battery.level);
   });
 
   return {
@@ -20,8 +20,8 @@ module.exports = (onBatteryUpdate) => {
         properties: ["read"],
         onReadRequest: (offset, callback) => {
           const result = Characteristic.RESULT_SUCCESS;
-          const data = new Buffer(parseInt(level));
-          console.log("LEVEL", level);
+          const data = new Buffer(level);
+          console.log("LEVEL", level, data);
 
           callback(result, data);
         },
