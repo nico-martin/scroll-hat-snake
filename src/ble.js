@@ -3,10 +3,12 @@ process.env["BLENO_DEVICE_NAME"] = "Scroll Hat Snake";
 const bleno = require("bleno");
 const deviceInfoService = require("./ble/deviceInfoService");
 const gameService = require("./ble/gameService");
+const batteryService = require("./ble/batteryService");
 
-const bluetoothService = async (gameInstance, intensity) => {
+const bluetoothService = async (gameInstance, intensity, onBatteryUpdate) => {
   const device = deviceInfoService();
   const game = gameService(gameInstance, intensity);
+  const battery = batteryService(onBatteryUpdate);
 
   bleno.on("stateChange", (state) => {
     if (state === "poweredOn") {
@@ -22,7 +24,7 @@ const bluetoothService = async (gameInstance, intensity) => {
       return;
     }
 
-    bleno.setServices([device, game]);
+    bleno.setServices([device, game, battery]);
   });
 
   bleno.on("disconnect", () => {

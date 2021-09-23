@@ -18,10 +18,12 @@ const init = async () => {
     intensity = newIntensity;
     em.emit("INTENSITY_UPDATE", intensity);
   };
-
-  await battery((values) => console.log(values));
+  await battery((values) => {
+    em.emit("BATTERY_UPDATE", values);
+  });
 
   const onIntensityUpdate = (listener) => em.emit("INTENSITY_UPDATE", listener);
+  const onBatteryUpdate = (listener) => em.emit("BATTERY_UPDATE", listener);
 
   const generateMatrixFromGame = (gameState) =>
     field.map((col, colIndex) =>
@@ -38,11 +40,11 @@ const init = async () => {
   await scrollController.init();
   const gameInstance = game();
 
-  await bluetoothService(gameInstance, [
-    intensity,
-    setIntensity,
-    onIntensityUpdate,
-  ]);
+  await bluetoothService(
+    gameInstance,
+    [intensity, setIntensity, onIntensityUpdate],
+    onBatteryUpdate
+  );
 
   /*
   const setStartScreen = () => {
