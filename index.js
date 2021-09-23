@@ -20,8 +20,10 @@ const init = async () => {
   };
   await battery((values) => em.emit("BATTERY_UPDATE", values));
 
-  const onIntensityUpdate = (listener) => em.emit("INTENSITY_UPDATE", listener);
-  const onBatteryUpdate = (listener) => em.emit("BATTERY_UPDATE", listener);
+  const onIntensityUpdate = (listener) =>
+    em.addListener("INTENSITY_UPDATE", listener);
+  const onBatteryUpdate = (listener) =>
+    em.addListener("BATTERY_UPDATE", listener);
 
   onBatteryUpdate((v) => console.log("ijewidewdwo", v));
 
