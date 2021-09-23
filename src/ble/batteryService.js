@@ -8,8 +8,10 @@ const battery = require("../battery");
 
 module.exports = (onBatteryUpdate) => {
   let level = 0;
+  let isLoading = 0;
   onBatteryUpdate((battery) => {
     level = parseInt(battery.level, 10);
+    isLoading = battery.isLoading;
   });
 
   return {
@@ -27,6 +29,20 @@ module.exports = (onBatteryUpdate) => {
         onSubscribe: (maxValueSize, updateValueCallback) =>
           onBatteryUpdate((battery) =>
             updateValueCallback(new Buffer([parseInt(battery.level, 10)]))
+          ),
+      }),
+      new Characteristic({
+        uuid: "17324f48a9c3487a83ffe6046cf48b51", // is Loading
+        properties: ["read", "notify"],
+        onReadRequest: (offset, callback) => {
+          const result = Characteristic.RESULT_SUCCESS;
+          const data = new Buffer([isLoading ? 1 : 0]);
+
+          callback(result, data);
+        },
+        onSubscribe: (maxValueSize, updateValueCallback) =>
+          onBatteryUpdate((battery) =>
+            updateValueCallback(new Buffer([battery.isLoading ? 1 : 0]))
           ),
       }),
     ],
