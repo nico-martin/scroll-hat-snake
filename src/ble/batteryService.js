@@ -9,7 +9,6 @@ const battery = require("../battery");
 module.exports = (onBatteryUpdate) => {
   let level = 0;
   onBatteryUpdate((battery) => {
-    console.log("battery", battery);
     level = battery.level;
   });
 

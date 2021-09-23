@@ -25,8 +25,6 @@ const init = async () => {
   const onBatteryUpdate = (listener) =>
     em.addListener("BATTERY_UPDATE", listener);
 
-  onBatteryUpdate((v) => console.log("ijewidewdwo", v));
-
   const generateMatrixFromGame = (gameState) =>
     field.map((col, colIndex) =>
       col.map((row, rowIndex) =>
