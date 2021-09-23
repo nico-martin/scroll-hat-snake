@@ -17,13 +17,17 @@ module.exports = (onBatteryUpdate) => {
     characteristics: [
       new Characteristic({
         uuid: "2a19", // battery level
-        properties: ["read"],
+        properties: ["read", "notify"],
         onReadRequest: (offset, callback) => {
           const result = Characteristic.RESULT_SUCCESS;
           const data = new Buffer([level]);
 
           callback(result, data);
         },
+        onSubscribe: (maxValueSize, updateValueCallback) =>
+          onBatteryUpdate((battery) =>
+            updateValueCallback(new Buffer([parseInt(battery.level, 10)]))
+          ),
       }),
     ],
   };
