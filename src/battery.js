@@ -19,6 +19,8 @@ const battery = async (listener, timeoutInterval = 2000) => {
     newLevel = Math.round(newLevel);
     const newIsLoading = shuntVoltage > 0;
 
+    console.log({ newLevel, newIsLoading });
+
     if (newLevel !== level || newIsLoading !== isLoading) {
       isLoading = newIsLoading;
       level = newLevel;
