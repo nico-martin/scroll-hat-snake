@@ -20,7 +20,7 @@ module.exports = (onBatteryUpdate) => {
         properties: ["read"],
         onReadRequest: (offset, callback) => {
           const result = Characteristic.RESULT_SUCCESS;
-          const data = new Buffer(level);
+          const data = new Buffer(level.toString(16));
           console.log("LEVEL", level);
 
           callback(result, data);
