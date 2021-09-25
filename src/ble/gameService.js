@@ -8,10 +8,12 @@ module.exports = (
   let gameState = "";
   let direction = "";
   let snakeLength = 0;
+  let gameCount = 0;
   gameInstance.onStepUpdate((currentGameState) => {
     direction = currentGameState.direction;
     gameState = currentGameState.gameState;
     snakeLength = currentGameState.snake.length;
+    gameCount = currentGameState.gameCount;
   });
   onIntensityUpdate((newIntensity) => {
     intensity = newIntensity;
@@ -100,7 +102,7 @@ module.exports = (
         },
         onReadRequest: (offset, callback) => {
           const result = Characteristic.RESULT_SUCCESS;
-          const data = new Buffer(snakeLength.toString(16));
+          const data = new Buffer(gameCount);
 
           callback(result, data);
         },
