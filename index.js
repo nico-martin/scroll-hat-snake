@@ -20,6 +20,7 @@ const init = async () => {
   const width = 17;
   const height = 7;
   const field = Array(height).fill(Array(width).fill(0));
+  let currentGame = {};
 
   let intensity = 100;
   const setIntensity = (newIntensity) => {
@@ -46,10 +47,11 @@ const init = async () => {
       listener(data.newGameState, data.gameState)
     );
 
-  const generateMatrixFromGame = (gameState) =>
+  const generateMatrixFromGame = () =>
     field.map((col, colIndex) =>
       col.map((row, rowIndex) =>
-        gameState.snake.find(
+        currentGame &&
+        currentGame.snake.find(
           (snakePixel) => rowIndex === snakePixel.x && colIndex === snakePixel.y
         ) !== undefined
           ? Math.floor(intensity / 2)
@@ -97,13 +99,11 @@ const init = async () => {
             clearInterval(blinkInterval);
             setGameState(GAME_STATES.RESTART);
           }
-          scrollController.display(
-            matrixToArray(generateMatrixFromGame(gameState))
-          );
+          scrollController.display(matrixToArray(generateMatrixFromGame()));
           setTimeout(
             () =>
               scrollController.display(
-                matrixToArray(generateMatrixFromGame(gameState)).map((i) => 0)
+                matrixToArray(generateMatrixFromGame()).map((i) => 0)
               ),
             500
           );
@@ -120,7 +120,8 @@ const init = async () => {
   });
 
   gameInstance.onStepUpdate((gameState) => {
-    scrollController.display(matrixToArray(generateMatrixFromGame(gameState)));
+    currentGame = gameState;
+    scrollController.display(matrixToArray(generateMatrixFromGame()));
   });
 };
 
