@@ -55,7 +55,7 @@ const init = async () => {
           (snakePixel) => rowIndex === snakePixel.x && colIndex === snakePixel.y
         ) !== undefined
           ? Math.floor(intensity / 2)
-          : rowIndex === gameState.food.x && colIndex === gameState.food.y
+          : rowIndex === currentGame.food.x && colIndex === currentGame.food.y
           ? intensity
           : 0
       )
