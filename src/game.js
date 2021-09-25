@@ -10,18 +10,12 @@ const DIRECTIONS = {
   DOWN: "DOWN",
 };
 
-const GAME_STATES = {
-  START: "START",
-  STOP: "STOP",
-  PAUSE: "PAUSE",
-};
-
 const hasColision = (pixel, snake) =>
   snake.find(
     (snakePixel) => snakePixel.x === pixel.x && snakePixel.y === pixel.y
   ) !== undefined;
 
-const game = (config) => {
+const game = (config, onCollision) => {
   const { height, width, fps } = {
     width: 17,
     height: 7,
@@ -63,7 +57,6 @@ const game = (config) => {
     snake: generateStartSnake(),
     food: generateFood(),
     gameCount: 0,
-    gameState: GAME_STATES.START,
   };
 
   const updateGameState = (partialState) => {
@@ -90,9 +83,6 @@ const game = (config) => {
 
   const stopGame = (pause = false) => {
     clearInterval(gameInterval);
-    updateGameState({
-      gameState: pause ? GAME_STATES.PAUSE : GAME_STATES.STOP,
-    });
   };
 
   /*
@@ -149,9 +139,6 @@ const game = (config) => {
   };
 
   const generateNextStap = async () => {
-    if (gameState.gameState === GAME_STATES.STOP) {
-      stopGame();
-    }
     const nextPixel = getNextPixel(gameState.snake[0], gameState.direction);
     const oldSnakeWithoutFood = gameState.snake.filter(
       (pixel, i, full) => i !== full.length - 1
@@ -160,9 +147,8 @@ const game = (config) => {
     const snakeWithoutFood = [nextPixel, ...oldSnakeWithoutFood];
 
     if (hasColision(nextPixel, oldSnakeWithoutFood)) {
-      return updateGameState({
-        gameState: GAME_STATES.STOP,
-      });
+      onCollision();
+      return;
     }
 
     const foundFood =
@@ -182,7 +168,6 @@ const game = (config) => {
       startGame();
     },
     stop: () => stopGame(),
-    pause: () => stopGame(true),
     onStepUpdate: (listener) => em.on(UPDATE_EVENT, listener),
     setDirection: (dirIndex) => {
       const directions = Object.values(DIRECTIONS);
