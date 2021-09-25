@@ -64,10 +64,15 @@ module.exports = (
             value: "snakeLangth value",
           }),
         ],
-        onSubscribe: (maxValueSize, updateValueCallback) =>
-          gameInstance.onStepUpdate((data) =>
-            updateValueCallback(new Buffer(data.snake.length.toString(16)))
-          ),
+        onSubscribe: (maxValueSize, updateValueCallback) => {
+          let length = null;
+          gameInstance.onStepUpdate((data) => {
+            if (data.snake.length !== length) {
+              updateValueCallback(new Buffer(data.snake.length.toString(16)));
+              length = data.snake.length;
+            }
+          });
+        },
         onReadRequest: (offset, callback) => {
           const result = Characteristic.RESULT_SUCCESS;
           const data = new Buffer(snakeLength.toString(16));
@@ -77,17 +82,28 @@ module.exports = (
       }),
       new Characteristic({
         uuid: "0144e26e849f415da9c0db05e4a37230",
-        properties: ["notify"],
+        properties: ["notify", "read"],
         descriptors: [
           new bleno.Descriptor({
             uuid: "c709728039bc4e939bc025bcf3e5951a",
             value: "gameCount value",
           }),
         ],
-        onSubscribe: (maxValueSize, updateValueCallback) =>
-          gameInstance.onStepUpdate((data) =>
-            updateValueCallback(new Buffer(data.gameCount))
-          ),
+        onSubscribe: (maxValueSize, updateValueCallback) => {
+          let count = null;
+          gameInstance.onStepUpdate((data) => {
+            if (data.gameCount !== count) {
+              updateValueCallback(new Buffer(data.gameCount));
+              count = data.gameCount;
+            }
+          });
+        },
+        onReadRequest: (offset, callback) => {
+          const result = Characteristic.RESULT_SUCCESS;
+          const data = new Buffer(snakeLength.toString(16));
+
+          callback(result, data);
+        },
       }),
       new Characteristic({
         uuid: "0e5781c5d5b5402c82f8307e4350f5ce",
