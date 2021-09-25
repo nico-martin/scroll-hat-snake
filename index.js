@@ -83,6 +83,8 @@ const init = async () => {
 
   setStartScreen();
   onGameStateUpdate((state, prevState) => {
+    state = Object.values(GAME_STATES)[state];
+    console.log("onGameStateUpdate", state, prevState);
     switch (state) {
       case GAME_STATES.GAME:
         gameInstance.start(prevState === GAME_STATES.RESTART);
