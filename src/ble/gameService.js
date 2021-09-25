@@ -3,7 +3,8 @@ const Characteristic = bleno.Characteristic;
 
 module.exports = (
   gameInstance,
-  [intensity, setIntensity, onIntensityUpdate]
+  [intensity, setIntensity, onIntensityUpdate],
+  [gameState, setGameState, onGameStateUpdate]
 ) => {
   let gameState = "";
   let direction = "";
@@ -163,12 +164,6 @@ module.exports = (
           }),
         onWriteRequest: (data, offset, withoutResponse, callback) => {
           const state = data.readUInt8(0);
-          const methods = [
-            () => gameInstance.start(),
-            () => gameInstance.start(true),
-            () => gameInstance.stop(),
-            () => gameInstance.pause(),
-          ];
 
           if (data.length !== 1) {
             console.log("ERROR: invalid data", data);
@@ -177,13 +172,14 @@ module.exports = (
           }
           if (state >= methods.length) {
             console.log(
-              "ERROR: value has to be 0 (start), 1 (restart), 2 (stop), or 3 (pause)"
+              "ERROR: value has to be 0 (game), 1 (stop), 2 (restart), or 3 (pause)"
             );
             callback(Characteristic.RESULT_UNLIKELY_ERROR);
             return;
           }
 
-          methods[state]();
+          console.log("state", state);
+          setGameState(state);
           callback(Characteristic.RESULT_SUCCESS);
         },
       }),

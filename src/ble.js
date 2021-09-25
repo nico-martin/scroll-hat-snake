@@ -5,9 +5,14 @@ const deviceInfoService = require("./ble/deviceInfoService");
 const gameService = require("./ble/gameService");
 const batteryService = require("./ble/batteryService");
 
-const bluetoothService = async (gameInstance, intensity, onBatteryUpdate) => {
+const bluetoothService = async (
+  gameInstance,
+  intensity,
+  onBatteryUpdate,
+  gameState
+) => {
   const device = deviceInfoService();
-  const game = gameService(gameInstance, intensity);
+  const game = gameService(gameInstance, intensity, gameState);
   const battery = batteryService(onBatteryUpdate);
 
   bleno.on("stateChange", (state) => {

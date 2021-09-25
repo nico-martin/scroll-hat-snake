@@ -62,7 +62,8 @@ const init = async () => {
   await bluetoothService(
     gameInstance,
     [intensity, setIntensity, onIntensityUpdate],
-    onBatteryUpdate
+    onBatteryUpdate,
+    [gameState, setGameState, onGameStateUpdate]
   );
 
   const setStartScreen = () => {
