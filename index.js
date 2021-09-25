@@ -43,7 +43,7 @@ const init = async () => {
     em.addListener("BATTERY_UPDATE", listener);
   const onGameStateUpdate = (listener) =>
     em.addListener("GAME_STATE_UPDATE", (data) =>
-      listener(data.gameState, data.newGameState)
+      listener(data.newGameState, data.gameState)
     );
 
   const generateMatrixFromGame = (gameState) =>
