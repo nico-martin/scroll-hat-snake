@@ -95,14 +95,14 @@ module.exports = (
           let count = null;
           gameInstance.onStepUpdate((data) => {
             if (data.gameCount !== count) {
-              updateValueCallback(new Buffer(data.gameCount));
+              updateValueCallback(new Buffer(data.gameCount.toString(16)));
               count = data.gameCount;
             }
           });
         },
         onReadRequest: (offset, callback) => {
           const result = Characteristic.RESULT_SUCCESS;
-          const data = new Buffer(gameCount);
+          const data = new Buffer(gameCount.toString(16));
 
           callback(result, data);
         },
