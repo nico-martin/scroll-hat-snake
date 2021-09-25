@@ -165,7 +165,7 @@ module.exports = (
             callback(this.RESULT_INVALID_ATTRIBUTE_LENGTH);
             return;
           }
-          if (state >= methods.length) {
+          if (state > 4) {
             console.log(
               "ERROR: value has to be 0 (game), 1 (stop), 2 (restart), or 3 (pause)"
             );
