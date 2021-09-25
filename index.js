@@ -28,7 +28,10 @@ const init = async () => {
   };
 
   let gameState = GAME_STATES.RESTART;
+  const setGameStateFromIndex = (index) =>
+    setGameState(Object.values(GAME_STATES)[index]);
   const setGameState = (newGameState) => {
+    console.log("GAME_STATE_UPDATE", { gameState, newGameState });
     em.emit("GAME_STATE_UPDATE", { gameState, newGameState });
     gameState = newGameState;
   };
@@ -64,7 +67,7 @@ const init = async () => {
     gameInstance,
     [intensity, setIntensity, onIntensityUpdate],
     onBatteryUpdate,
-    [gameState, setGameState, onGameStateUpdate]
+    [gameState, setGameStateFromIndex, onGameStateUpdate]
   );
 
   const setStartScreen = () => {
@@ -84,9 +87,6 @@ const init = async () => {
 
   setStartScreen();
   onGameStateUpdate((state, prevState) => {
-    console.log("Object.values(GAME_STATES)", Object.values(GAME_STATES));
-    state = Object.values(GAME_STATES)[state];
-    console.log("onGameStateUpdate", state, prevState);
     switch (state) {
       case GAME_STATES.GAME:
         gameInstance.start(prevState === GAME_STATES.RESTART);
