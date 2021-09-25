@@ -31,7 +31,6 @@ const init = async () => {
   const setGameStateFromIndex = (index) =>
     setGameState(Object.values(GAME_STATES)[index]);
   const setGameState = (newGameState) => {
-    console.log("GAME_STATE_UPDATE", { gameState, newGameState });
     em.emit("GAME_STATE_UPDATE", { gameState, newGameState });
     gameState = newGameState;
   };
@@ -43,10 +42,9 @@ const init = async () => {
   const onBatteryUpdate = (listener) =>
     em.addListener("BATTERY_UPDATE", listener);
   const onGameStateUpdate = (listener) =>
-    em.addListener("GAME_STATE_UPDATE", (data) => {
-      console.log("GAME_STATE_UPDATE", data);
-      listener(data.gameState, data.newGameState);
-    });
+    em.addListener("GAME_STATE_UPDATE", (data) =>
+      listener(data.gameState, data.newGameState)
+    );
 
   const generateMatrixFromGame = (gameState) =>
     field.map((col, colIndex) =>
@@ -87,6 +85,7 @@ const init = async () => {
 
   setStartScreen();
   onGameStateUpdate((state, prevState) => {
+    console.log("onGameStateUpdate", state, prevState);
     switch (state) {
       case GAME_STATES.GAME:
         gameInstance.start(prevState === GAME_STATES.RESTART);
