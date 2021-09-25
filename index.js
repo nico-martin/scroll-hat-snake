@@ -46,6 +46,13 @@ const init = async () => {
     em.addListener("GAME_STATE_UPDATE", (data) =>
       listener(data.newGameState, data.gameState)
     );
+  const onGameStateUpdateIndex = (listener) =>
+    em.addListener("GAME_STATE_UPDATE", (data) =>
+      listener(
+        Object.values(GAME_STATES).findIndex((e) => e === data.newGameState),
+        Object.values(GAME_STATES).findIndex((e) => e === data.gameState)
+      )
+    );
 
   const generateMatrixFromGame = () =>
     field.map((col, colIndex) =>
@@ -70,7 +77,7 @@ const init = async () => {
     [
       Object.values(GAME_STATES).findIndex((e) => e === gameState),
       setGameStateFromIndex,
-      onGameStateUpdate,
+      onGameStateUpdateIndex,
     ]
   );
 
