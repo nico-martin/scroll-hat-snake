@@ -173,7 +173,6 @@ module.exports = (
             return;
           }
 
-          console.log("state", state);
           setGameState(state);
           callback(Characteristic.RESULT_SUCCESS);
         },
