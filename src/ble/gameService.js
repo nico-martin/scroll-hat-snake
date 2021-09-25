@@ -156,7 +156,7 @@ module.exports = (
         },
         onSubscribe: (maxValueSize, updateValueCallback) =>
           onGameStateUpdate((data) => {
-            console.log("onGameStateUpdate", onGameStateUpdate);
+            console.log("onGameStateUpdate", data);
             updateValueCallback(new Buffer([data]));
           }),
         onWriteRequest: (data, offset, withoutResponse, callback) => {
