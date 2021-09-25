@@ -150,13 +150,13 @@ module.exports = (
         onReadRequest: (offset, callback) => {
           const result = Characteristic.RESULT_SUCCESS;
           console.log("gameState", gameState);
-          const data = new Buffer(gameState);
+          const data = new Buffer([gameState]);
 
           callback(result, data);
         },
         onSubscribe: (maxValueSize, updateValueCallback) =>
           onGameStateUpdate((data) => {
-            updateValueCallback(new Buffer(data));
+            updateValueCallback(new Buffer([data]));
           }),
         onWriteRequest: (data, offset, withoutResponse, callback) => {
           const state = data.readUInt8(0);
