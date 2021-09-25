@@ -96,7 +96,7 @@ const init = async () => {
         let i = 0;
         const blinkInterval = setInterval(() => {
           scrollController.display(matrixToArray(generateMatrixFromGame()));
-          if (i === 3) {
+          if (i >= 3) {
             clearInterval(blinkInterval);
             setGameState(GAME_STATES.RESTART);
             return;
