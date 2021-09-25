@@ -67,7 +67,11 @@ const init = async () => {
     gameInstance,
     [intensity, setIntensity, onIntensityUpdate],
     onBatteryUpdate,
-    [gameState, setGameStateFromIndex, onGameStateUpdate]
+    [
+      Object.values(GAME_STATES).findIndex((e) => e === gameState),
+      setGameStateFromIndex,
+      onGameStateUpdate,
+    ]
   );
 
   const setStartScreen = () => {
