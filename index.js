@@ -85,7 +85,6 @@ const init = async () => {
 
   setStartScreen();
   onGameStateUpdate((state, prevState) => {
-    console.log("onGameStateUpdate", state, prevState);
     switch (state) {
       case GAME_STATES.GAME:
         gameInstance.start(prevState === GAME_STATES.RESTART);
@@ -96,9 +95,18 @@ const init = async () => {
         const blinkInterval = setInterval(() => {
           if (i === 3) {
             clearInterval(blinkInterval);
-            setTimeout(() => setGameState(GAME_STATES.RESTART), 3000);
+            setGameState(GAME_STATES.RESTART);
           }
-          console.log("BLINK");
+          scrollController.display(
+            matrixToArray(generateMatrixFromGame(gameState))
+          );
+          setTimeout(
+            () =>
+              scrollController.display(
+                matrixToArray(generateMatrixFromGame(gameState)).map((i) => 0)
+              ),
+            500
+          );
           i++;
         }, 1000);
         break;
@@ -108,7 +116,6 @@ const init = async () => {
       case GAME_STATES.PAUSE:
         gameInstance.stop();
         break;
-      //
     }
   });
 
