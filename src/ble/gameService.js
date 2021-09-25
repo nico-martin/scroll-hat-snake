@@ -55,7 +55,7 @@ module.exports = (
       }),
       new Characteristic({
         uuid: "b7d1871e766f4382831f525d14c32d1e",
-        properties: ["notify"],
+        properties: ["notify", "read"],
         descriptors: [
           new bleno.Descriptor({
             uuid: "1c9e2bd81c1b41ada180dc262793e355",
@@ -66,6 +66,12 @@ module.exports = (
           gameInstance.onStepUpdate((data) =>
             updateValueCallback(new Buffer(data.snake.length.toString(16)))
           ),
+        onReadRequest: (offset, callback) => {
+          const result = Characteristic.RESULT_SUCCESS;
+          const data = new Buffer((1).toString(16));
+
+          callback(result, data);
+        },
       }),
       new Characteristic({
         uuid: "0144e26e849f415da9c0db05e4a37230",
