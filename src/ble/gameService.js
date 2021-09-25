@@ -6,13 +6,11 @@ module.exports = (
   [intensity, setIntensity, onIntensityUpdate],
   [gameState, setGameState, onGameStateUpdate]
 ) => {
-  let gameState = "";
   let direction = "";
   let snakeLength = 0;
   let gameCount = 0;
   gameInstance.onStepUpdate((currentGameState) => {
     direction = currentGameState.direction;
-    gameState = currentGameState.gameState;
     snakeLength = currentGameState.snake.length;
     gameCount = currentGameState.gameCount;
   });
@@ -156,11 +154,8 @@ module.exports = (
           callback(result, data);
         },
         onSubscribe: (maxValueSize, updateValueCallback) =>
-          gameInstance.onStepUpdate((data) => {
-            if (gameState !== data.gameState) {
-              gameState = data.gameState;
-              updateValueCallback(new Buffer(data.gameState));
-            }
+          onGameStateUpdate((data) => {
+            updateValueCallback(new Buffer(data));
           }),
         onWriteRequest: (data, offset, withoutResponse, callback) => {
           const state = data.readUInt8(0);
