@@ -1,5 +1,7 @@
 const bleno = require("bleno");
 const Characteristic = bleno.Characteristic;
+global.TextEncoder = require("util").TextEncoder;
+
 const encoder = new TextEncoder();
 
 module.exports = (
