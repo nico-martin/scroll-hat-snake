@@ -1,5 +1,6 @@
 const bleno = require("bleno");
 const Characteristic = bleno.Characteristic;
+const encoder = new TextEncoder();
 
 module.exports = (
   gameInstance,
@@ -69,14 +70,14 @@ module.exports = (
           let length = null;
           gameInstance.onStepUpdate((data) => {
             if (data.snake.length !== length) {
-              updateValueCallback(new Buffer(data.snake.length));
+              updateValueCallback(encoder.encode(data.snake.length.toString()));
               length = data.snake.length;
             }
           });
         },
         onReadRequest: (offset, callback) => {
           const result = Characteristic.RESULT_SUCCESS;
-          const data = new Buffer(snakeLength.length);
+          const data = encoder.encode(snakeLength.length.toString());
 
           callback(result, data);
         },
@@ -94,14 +95,14 @@ module.exports = (
           let count = null;
           gameInstance.onStepUpdate((data) => {
             if (data.gameCount !== count) {
-              updateValueCallback(new Buffer(data.gameCount));
+              updateValueCallback(encoder.encode(data.gameCount.toString()));
               count = data.gameCount;
             }
           });
         },
         onReadRequest: (offset, callback) => {
           const result = Characteristic.RESULT_SUCCESS;
-          const data = new Buffer(gameCount);
+          const data = encoder.encode(gameCount.toString());
 
           callback(result, data);
         },
