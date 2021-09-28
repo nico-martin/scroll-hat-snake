@@ -69,7 +69,7 @@ module.exports = (
           let length = null;
           gameInstance.onStepUpdate((data) => {
             if (data.snake.length !== length) {
-              updateValueCallback(new Buffer(data.snake.length.toString(16)));
+              updateValueCallback(new Buffer(data.snake.length));
               length = data.snake.length;
             }
           });
@@ -94,7 +94,7 @@ module.exports = (
           let count = null;
           gameInstance.onStepUpdate((data) => {
             if (data.gameCount !== count) {
-              updateValueCallback(new Buffer(data.gameCount.toString(16)));
+              updateValueCallback(new Buffer(data.gameCount));
               count = data.gameCount;
             }
           });
