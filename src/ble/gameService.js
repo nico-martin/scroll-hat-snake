@@ -78,9 +78,7 @@ module.exports = (
         },
         onReadRequest: (offset, callback) => {
           const result = Characteristic.RESULT_SUCCESS;
-          const data = new Buffer(
-            new Buffer(JSON.stringify(snakeLength.length))
-          );
+          const data = new Buffer(JSON.stringify(snakeLength.length));
 
           callback(result, data);
         },
