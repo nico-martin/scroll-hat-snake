@@ -79,6 +79,7 @@ module.exports = (
         },
         onReadRequest: (offset, callback) => {
           const result = Characteristic.RESULT_SUCCESS;
+          console.log("snakeLength", snakeLength);
           const data = encoder.encode(snakeLength.length.toString());
 
           callback(result, data);
