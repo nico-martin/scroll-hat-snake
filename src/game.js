@@ -78,40 +78,14 @@ const game = (config, onCollision) => {
   };
 
   const startGame = () => {
-    gameInterval = setInterval(generateNextStap, 1000 / fps);
+    if (!gameInterval) {
+      gameInterval = setInterval(generateNextStap, 1000 / fps);
+    }
   };
 
   const stopGame = (pause = false) => {
     clearInterval(gameInterval);
   };
-
-  /*
-  const blinkCurrentScreen = () =>
-    new Promise((resolve) => {
-      let i = 0;
-
-      const blinkInterval = setInterval(async () => {
-        i++;
-        if (i === 3) {
-          clearInterval(blinkInterval);
-          resolve();
-        }
-        em.emit(STEP_EVENT, {
-          matrix: offScreen,
-          currentDirection,
-          snakeLength: snake.length,
-          gameCount,
-        });
-        await wait(700);
-        em.emit(STEP_EVENT, {
-          matrix: currentGameScreen,
-          currentDirection,
-          snakeLength: snake.length,
-          gameCount,
-        });
-        await wait(700);
-      }, 1400);
-    });*/
 
   const getNextPixel = ({ x, y }, direction) => {
     switch (direction) {
