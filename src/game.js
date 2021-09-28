@@ -85,6 +85,7 @@ const game = (config, onCollision) => {
 
   const stopGame = (pause = false) => {
     clearInterval(gameInterval);
+    gameInterval = null;
   };
 
   const getNextPixel = ({ x, y }, direction) => {
