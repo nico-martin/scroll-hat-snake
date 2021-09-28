@@ -155,10 +155,7 @@ module.exports = (
           callback(result, data);
         },
         onSubscribe: (maxValueSize, updateValueCallback) =>
-          onGameStateUpdate((data) => {
-            console.log("onGameStateUpdate", data);
-            updateValueCallback(new Buffer([data]));
-          }),
+          onGameStateUpdate((data) => updateValueCallback(new Buffer([data]))),
         onWriteRequest: (data, offset, withoutResponse, callback) => {
           const state = data.readUInt8(0);
 
