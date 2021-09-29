@@ -6,9 +6,6 @@ const bluetoothService = require("./src/ble");
 const scrollController = new (require("scroll-controller"))();
 const battery = require("./src/battery");
 
-// todo: add restart option (writable characteristic with states 0 = stop, 1 = pause, 2 = running)
-// todo: add gameStat Screen (start = game, stop = "SNAKE", pause = game but no steps running)
-
 const GAME_STATES = {
   GAME: "GAME",
   STOP: "STOP",
